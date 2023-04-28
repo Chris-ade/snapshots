@@ -1,0 +1,28 @@
+{% extends 'profile-wrapper.html' %}
+{% load static tags %}
+{% block content %}
+<div class="profile-cover" style="background-image: url('{{ user.cover.url }}');">
+<div class="profile-cover-header">
+<div class="profile-meta">
+<span class="user-avatar profile-meta-avatar" style="background-image: url('{{ user.avatar.url }}');" title="ongoglabogian"></span>
+<div class="profile-meta-data">
+<div class="profile-meta-user">{{ user.username }}</div>
+<div class="profile-meta-stats">{{ post_count }} Posts<span class="profile-meta-divider">•</span>
+<a class="profile-meta-stats">Joined: {{ user.date_joined|date }}</a>
+<p class="uk-margin-small">{{ user.bio }}</p>
+</div>
+</div>
+</div>
+
+<ul class="profile-cover-tabs" uk-tab>
+<li class="uk-active"><a hx-get="{% url 'accounts:feeds' username=user.username %}" hx-target="#tabs-content" hx-swap="innerHTML" hx-trigger="load, click">Posts</a></li>
+<li><a hx-get="{% url 'accounts:comments' username=user.username %}" hx-target="#tabs-content" hx-swap="innerHTML">Comments</a></li>
+<li><a hx-get="{% url 'accounts:images' username=user.username %}" hx-target="#tabs-content" hx-swap="innerHTML">Images</a></li>
+<li><a hx-get="{% url 'accounts:videos' username=user.username %}" hx-target="#tabs-content" hx-swap="innerHTML">Videos</a></li>
+</ul>
+
+</div>
+</div>
+
+<div class="profile-content uk-padding-small" id="tabs-content"></div>
+{% endblock %}

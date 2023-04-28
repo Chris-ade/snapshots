@@ -1,0 +1,51 @@
+{% extends 'wrapper.html' %}
+{% block content %}
+<div class="upload-wrapper uk-card uk-card-body uk-card-default">
+<div class="upload-container">
+<div class="js-upload uk-placeholder uk-width-1-1">
+<span uk-icon="icon: cloud-upload"></span>
+<span class="uk-text-middle">Add files by dropping them here or</span>
+<div uk-form-custom>
+<input type="file" name="file" id="file" accept="image/*, video/mp4">
+<span class="uk-link">selecting them</span>
+</div>
+</div>
+<div class="tos">By creating a post, you agree to our Terms of Service and Privacy Policy</div>
+</div>
+</div>
+</div>
+
+<div id="crop-modal" uk-modal>
+<div class="uk-modal-dialog uk-modal-body">
+<h2 class="uk-modal-title">Preview</h2>
+<p>Max. upload size: 5MB</p>
+<form class="uk-margin" method="post" id="image-form" enctype="multipart/form-data">
+<input type="text" name="caption" class="uk-input" placeholder="Give your post a title..." required>
+<div class="uk-margin">
+<img id="crop-preview" class="image-preview uk-height-1-1" src="" alt="Image preview">
+</div>
+<p class="uk-text-right">
+<button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+<button type="submit" class="uk-button uk-button-primary" type="button">Save</button>
+</p>
+</form>
+</div>
+</div>
+
+<div id="video-modal" uk-modal>
+<div class="uk-modal-dialog uk-modal-body">
+<h2 class="uk-modal-title">Preview</h2>
+<p>Max. upload size: 30MB</p>
+<form class="uk-margin" method="post" id="video-form" enctype="multipart/form-data">
+<input type="text" name="caption" class="uk-input" placeholder="Give your post a title..." required>
+<div class="uk-margin">
+<video src="" id="video-preview" class="video-preview"  controls>
+</div>
+<p class="uk-text-right">
+<button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+<button type="submit" class="uk-button uk-button-primary" type="button">Save</button>
+</p>
+</form>
+</div>
+</div>
+{% endblock %}

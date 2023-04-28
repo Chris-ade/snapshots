@@ -1,0 +1,35 @@
+{% load static tags %}
+{% if posts %}
+<div class="image-grid-wrap">
+<div class="image-grid">
+<div class="image-row uk-child-width-expand@s" uk-grid>
+{% for post in posts %}
+{% for file in post.files.all %}
+<div style="background-image: url('{{ file.url.url }}');">
+<a href="{% url 'feed:view' post.link %}">
+<div class="overlay"></div>
+<div class="image-owner">
+<a href="{% url 'accounts:profile' post.user.username %}"><img class="avatar" src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}'s picture"></a>
+<a href="{% url 'accounts:profile' post.user.username %}"><div class="name">{{ post.user.username }}</div></a>
+</div>
+<div class="photo-time">{{ post.created_at|custom_date }}</div>
+<a class="photo-like {% if request.user in post.likes.all %}is-liked{% endif %}" data-id="{{ post.id }}">
+<div class="inner" uk-tooltip="title: {% if request.user in post.likes.all %}Liked{% else %}Like post{% endif %}; pos: bottom">
+<div class="like-overlay"></div>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+</div>
+<span>{{ post.likes.count }}</span>
+</a>
+</a>
+</div>
+{% endfor %}
+{% endfor %}
+</div>
+</div>
+</div>
+{% else %}
+<div class="uk-placeholder uk-text-center">
+<h3 class="uk-text-lead">{{ user.username }} has not uploaded an image.</h3>
+<p> When they do, it'll show up here. </p>
+</div>
+{% endif %}

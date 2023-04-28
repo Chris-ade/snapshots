@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>{{page_title}}</title>
+<meta charset="UTF-8">
+<meta name="theme-color" content="#3d70b2">
+<meta name="description" content="Welcome to SnapShots. Share captured images and videos.">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover">
+<meta name="token" content="{{ csrf_token }}">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="pragma" content="no-cache">
+<link rel="stylesheet" href="{% static 'css/uikit.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/main.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/grid.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/cropper.min.css' %}" type="text/css">
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/toast/toast.css' %}">
+</head>
+
+<body>
+<div class="progress-loading" id="loading-bar"><div class="indeterminate"></div></div>
+<!--<div id="splash-screen" style="position: fixed; z-index: 100; background: rgb(255, 255, 255) none repeat scroll 0% 0%; top: 0px; left: 0px; width: 100%; height: 100%; display: none;">
+<style type="text/css" nonce="">html{overflow-y:scroll!important}</style>
+<span style="position:absolute;bottom:32px;left:50%;margin:-36px 0 0 -36px;">
+<img src="" width="72px" height="37px">
+</span>
+</div>-->
+
+<header class="uk-navbar-container navbar-wrapper uk-visible@l" style="background: transparent !important;">
+<div class="uk-container">
+<div class="uk-navbar header-navbar" uk-navbar>
+<div class="uk-navbar-left">
+<a class="uk-logo uk-flex uk-flex-middle uk-button-text" href="{% url 'feed:home' %}">
+<svg class="icon stroke-white" role="img" width="24" height="24" viewBox="0 0 24 24">
+<title>SnapShots</title>
+<path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"></path>
+<g stroke-linecap="round">
+<path d="M3 16H14.3164"></path>
+<path d="M4.03589 6.20575L9.68257 15.9861"></path>
+<path d="M13.0359 2.20575L7.37891 12.004"></path>
+<path d="M10.9641 21.7942L16.6146 12.0074"></path>
+<path d="M19.9641 17.7942L14.3086 7.99866"></path>
+<path d="M21 7.98721H9.71844"></path>
+</g>
+</svg><span class="uk-margin-small-left uk-text-bold"> SnapShots </span>
+</a>
+</div>
+
+<div class="uk-navbar-center">
+<div class="search-bar">
+<form class="uk-search uk-search-default" action="/search" method="POST" accept-charset="UTF-8">
+<button type="submit" class="uk-search-icon-flip text-white" uk-search-icon></button>
+<input class="uk-search-input search-bar-input" type="search" name="search" placeholder="Images, #tags, @users oh my!" type="text" aria-label="Search">
+</form>
+</div>
+</div>
+
+<div class="uk-navbar-right">
+<a class="uk-button-text" id="toggle-mode" uk-tooltip="title: Toggle mode; pos: bottom">
+<svg width="24" height="24" viewBox="0 0 24 24" class="icon stroke-white">
+<path d="M12 19a7 7 0 1 0 0-14 7 7 0 0 0 0 14z"></path>
+<path d="M15.899 12.899a4 4 0 0 1-4.797-4.797A4.002 4.002 0 0 0 12 16c1.9 0 3.49-1.325 3.899-3.101z"></path>
+<path d="M12 5V3M12 21v-2"></path>
+<path d="M5 12H2h3zM22 12h-3 3zM16.95 7.05L19.07 4.93 16.95 7.05zM4.929 19.071L7.05 16.95 4.93 19.07zM16.95 16.95l2.121 2.121-2.121-2.121zM4.929 4.929L7.05 7.05 4.93 4.93z"></path>
+</svg>
+</a>
+<a class="uk-button button" href="{% url 'feed:upload' %}" uk-tooltip="title: Upload a file; pos: bottom">
+<svg role="img" width="24" height="24" viewBox="0 0 24 24" class="icon stroke-white">
+<path d="M6.5,18 C4.01471863,18 2,15.9852814 2,13.5 C2,11.0147186 4.01471863,9 6.5,9 C6.9194849,9 7.3255638,9.05739789 7.71081142,9.16476838 C8.72277,7.28089089 10.711801,6 13,6 C15.9817502,6 18.4554927,8.17503894 18.9211951,11.0250841 C20.6555928,11.2331085 22,12.7095527 22,14.5 C22,16.4329966 20.4329966,18 18.5,18 L6.5,18 Z"></path>
+<path d="M12,11 L12,15"></path>
+<polyline points="10 12 12 10 14 12 14 12"></polyline>
+</svg> Upload</a>
+</div>
+
+</div>
+</div>
+</header>
+
+
+<header class="uk-navbar-container navbar-wrapper uk-hidden@l" style="background: transparent !important;" uk-navbar>
+<div class="mobile-navbar">
+<div class="nav-overlay uk-navbar-left">
+<a class="uk-logo uk-flex uk-flex-middle uk-button-text" href="{% url 'feed:home' %}">
+<svg class="icon stroke-white" role="img" width="24" height="24" viewBox="0 0 24 24">
+<title>SnapShots</title>
+<path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"></path>
+<g stroke-linecap="round">
+<path d="M3 16H14.3164"></path>
+<path d="M4.03589 6.20575L9.68257 15.9861"></path>
+<path d="M13.0359 2.20575L7.37891 12.004"></path>
+<path d="M10.9641 21.7942L16.6146 12.0074"></path>
+<path d="M19.9641 17.7942L14.3086 7.99866"></path>
+<path d="M21 7.98721H9.71844"></path>
+</g>
+</svg><span class="uk-margin-small-left uk-text-bold"> SnapShots </span>
+</a>
+</div>
+
+<div class="nav-overlay uk-navbar-right">
+<a class="uk-button-text" href="{% url 'feed:upload' %}" uk-tooltip="title: Upload a file; pos: bottom">
+<svg role="img" width="24" height="24" viewBox="0 0 24 24" class="icon stroke-white">
+<path d="M6.5,18 C4.01471863,18 2,15.9852814 2,13.5 C2,11.0147186 4.01471863,9 6.5,9 C6.9194849,9 7.3255638,9.05739789 7.71081142,9.16476838 C8.72277,7.28089089 10.711801,6 13,6 C15.9817502,6 18.4554927,8.17503894 18.9211951,11.0250841 C20.6555928,11.2331085 22,12.7095527 22,14.5 C22,16.4329966 20.4329966,18 18.5,18 L6.5,18 Z"></path>
+<path d="M12,11 L12,15"></path>
+<polyline points="10 12 12 10 14 12 14 12"></polyline>
+</svg>
+</a>
+<a class="uk-button-text" id="mobile-toggle" uk-tooltip="title: Toggle mode; pos: bottom">
+<svg width="24" height="24" viewBox="0 0 24 24" class="icon stroke-white">
+<path d="M12 19a7 7 0 1 0 0-14 7 7 0 0 0 0 14z"></path>
+<path d="M15.899 12.899a4 4 0 0 1-4.797-4.797A4.002 4.002 0 0 0 12 16c1.9 0 3.49-1.325 3.899-3.101z"></path>
+<path d="M12 5V3M12 21v-2"></path>
+<path d="M5 12H2h3zM22 12h-3 3zM16.95 7.05L19.07 4.93 16.95 7.05zM4.929 19.071L7.05 16.95 4.93 19.07zM16.95 16.95l2.121 2.121-2.121-2.121zM4.929 4.929L7.05 7.05 4.93 4.93z"></path>
+</svg>
+</a>
+<a class="uk-navbar-toggle" uk-search-icon uk-toggle="target: .nav-overlay; animation: uk-animation-fade" href="#"></a>
+</div>
+
+<div class="nav-overlay uk-navbar-left uk-flex-1" hidden>
+<div class="uk-navbar-item uk-width-expand">
+<form action="" method="POST" accept-charset="UTF-8" class="uk-search uk-search-navbar uk-width-1-1">
+<input class="uk-search-input uk-text-small" type="search" name="search" placeholder="Images, #tags, @users oh my!" type="text" aria-label="Search">
+</form>
+</div>
+
+<a class="uk-navbar-toggle" uk-close uk-toggle="target: .nav-overlay; animation: uk-animation-fade" href="#"></a>
+
+</div>
+</div>
+</header>
+
+{% block content %}{% endblock %}
+
+<script src="{% static 'js/jquery-3.6.3.min.js' %}"></script>
+<script src="{% static 'js/htmx.min.js' %}"></script>
+<script src="{% static 'plugins/toast/toast.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'js/uikit.js' %}"></script>
+<script src="{% static 'js/uikit-icons.min.js' %}"></script>
+<script src="{% static 'js/cropper.min.js' %}"></script>
+</body>
+</html>
